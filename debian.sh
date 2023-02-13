@@ -20,12 +20,17 @@ croc=false
 pip=false
 xfce=false
 xrdp=false
+all=false
 
 while getopts "o:" opt; do
  case $opt in
   o)
    shift
    while [ $# -gt 0 ] && [ "$!" != "-" ]; do
+    if [ "$1" == "all" ]; then
+     all=true
+     break
+    fi
     if [ "$1" == "certbot" ]; then
      certbot=true
     fi
@@ -58,26 +63,36 @@ sudo apt -y install apache2 mariadb-server php php-common libapache2-mod-php
 sudo mysql_secure_installation
 sudo apt -y install phpmyadmin
 
-
-if [ $certbot == true ]; then
- sudo apt -y install snapd
- sudo snap install core
- sudo snap install --classic certbot
-fi
-
-if [ $croc == true ]; then
- curl https://getcroc.schollz.com | bash
-fi
-
-if [ $pip == true ]; then
- sudo apt -y install python3-pip
+if [ $all == true ]; then
+  sudo apt -y install snapd
+  sudo snap install core
+  sudo snap install --classic certbot
+  curl https://getcroc.schollz.com | bash
+  sudo apt -y install python3-pip
+  sudo apt -y install task-xfce-desktop xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils
+  sudo apt -y install xrdp
+  sudo adduser xrdp ssl-cert
+else
+ if [ $certbot == true ]; then
+  sudo apt -y install snapd
+  sudo snap install core
+  sudo snap install --classic certbot
  fi
 
-if [ $xfce == true ]; then
- sudo apt -y install task-xfce-desktop xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils
-fi
+ if [ $croc == true ]; then
+  curl https://getcroc.schollz.com | bash
+ fi
 
-if [ $xrdp == true ]; then
- sudo apt -y install xrdp
- sudo adduser xrdp ssl-cert
+ if [ $pip == true ]; then
+  sudo apt -y install python3-pip
+ fi
+
+ if [ $xfce == true ]; then
+  sudo apt -y install task-xfce-desktop xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils
+ fi
+
+ if [ $xrdp == true ]; then
+  sudo apt -y install xrdp
+  sudo adduser xrdp ssl-cert
+ fi
 fi
