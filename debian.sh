@@ -62,11 +62,12 @@ while getopts "o:" opt; do
   esac
 done
 
+echo -e "\n\n"
 echo -e "\033[38;5;213m                     __    \033[0m"
 echo -e "\033[38;5;51m(\,-----------------'()'--o\033[0m"
 echo -e "\033[38;5;213m(_    _Spool LAMP_    /~\" \033[0m"
 echo -e "\033[38;5;51m  (_)_)           (_)_)    \033[0m"
-echo -e "Starting installation..."
+echo -e "Starting installation...\n\n"
 
 sudo apt -qq -y update
 sudo apt -qq -y upgrade
@@ -82,7 +83,7 @@ if [ $all == true ]; then
   curl https://getcroc.schollz.com | bash
   sudo apt -y -qq install python3-pip
   sudo apt -y -qq install task-xfce-desktop xfce4 
-  sudo apt -y -qq xorg dbus-x11 x11-xserver-utils
+  sudo apt -y -qq dbus-x11 x11-xserver-utils
   sudo apt -y -qq install xrdp
   sudo adduser xrdp ssl-cert
 else
@@ -101,7 +102,7 @@ else
  fi
 
  if [ $xfce == true ]; then
-  sudo apt -y -qq install task-xfce-desktop xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils
+  sudo apt -y -qq install task-xfce-desktop xfce4 dbus-x11 x11-xserver-utils
  fi
 
  if [ $xrdp == true ]; then
@@ -110,12 +111,14 @@ else
  fi
 fi
 
+echo -e "\n\n"
 echo -e "\033[38;5;213m                     __    \033[0m"
 echo -e "\033[38;5;51m(\,-----------------'()'--o\033[0m"
 echo -e "\033[38;5;213m(_    _Spool LAMP_    /~\" \033[0m"
 echo -e "\033[38;5;51m  (_)_)           (_)_)    \033[0m"
-echo -e "LAMP web server installation \033[32mSUCCESS!\033[0m"
-echo -e "If you installed XFCE, you need to open port 443 before you can use RDP."
-echo -e "Visit the homepage: http://$ip"
-echo -e "Visit phpMyAdmin: http://$ip/phpMyAdmin"
-echo -e "For further Apache configuration, see /etc/apache2"
+echo -e "\n"
+echo -e "LAMP web server installation \033[32mSUCCESS!\033[0m\n"
+echo -e "Homepage: http://$ip"
+echo -e "Visit phpMyAdmin: http://$ip/phpmyadmin"
+echo -e "\nFor further Apache configuration for your applicaton's needs, see /etc/apache2"
+echo -e "If you installed XFCE, you need to open port 443 before you can use RDP.\n\n"
