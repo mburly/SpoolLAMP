@@ -13,8 +13,13 @@
 # XRDP - Linux remote desktop connection
 #
 #
+# Suppress output of apt commands, instead put own echo in place saying Done!
+#
+#
+
 
 options_o=()
+ip=$(curl -s https://api.ipify.org)
 certbot=false
 croc=false
 pip=false
@@ -57,24 +62,32 @@ while getopts "o:" opt; do
   esac
 done
 
-sudo apt update
-sudo apt -y install git curl
-sudo apt -y install apache2 mariadb-server php php-common libapache2-mod-php
+echo -e "\033[38;5;213m                     __    \033[0m"
+echo -e "\033[38;5;51m(\,-----------------'()'--o\033[0m"
+echo -e "\033[38;5;213m(_    _Spool LAMP_    /~\" \033[0m"
+echo -e "\033[38;5;51m  (_)_)           (_)_)    \033[0m"
+echo -e "Starting installation..."
+
+sudo apt -qq -y update
+sudo apt -qq -y upgrade
+sudo apt -y -qq install git curl
+sudo apt -y -qq install apache2 mariadb-server php php-common libapache2-mod-php
 sudo mysql_secure_installation
-sudo apt -y install phpmyadmin
+sudo apt -y -qq install phpmyadmin
 
 if [ $all == true ]; then
   sudo apt -y install snapd
   sudo snap install core
   sudo snap install --classic certbot
   curl https://getcroc.schollz.com | bash
-  sudo apt -y install python3-pip
-  sudo apt -y install task-xfce-desktop xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils
-  sudo apt -y install xrdp
+  sudo apt -y -qq install python3-pip
+  sudo apt -y -qq install task-xfce-desktop xfce4 
+  sudo apt -y -qq xorg dbus-x11 x11-xserver-utils
+  sudo apt -y -qq install xrdp
   sudo adduser xrdp ssl-cert
 else
  if [ $certbot == true ]; then
-  sudo apt -y install snapd
+  sudo apt -y -qq install snapd
   sudo snap install core
   sudo snap install --classic certbot
  fi
@@ -84,15 +97,25 @@ else
  fi
 
  if [ $pip == true ]; then
-  sudo apt -y install python3-pip
+  sudo apt -y -qq install python3-pip
  fi
 
  if [ $xfce == true ]; then
-  sudo apt -y install task-xfce-desktop xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils
+  sudo apt -y -qq install task-xfce-desktop xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils
  fi
 
  if [ $xrdp == true ]; then
-  sudo apt -y install xrdp
+  sudo apt -y -qq install xrdp
   sudo adduser xrdp ssl-cert
  fi
 fi
+
+echo -e "\033[38;5;213m                     __    \033[0m"
+echo -e "\033[38;5;51m(\,-----------------'()'--o\033[0m"
+echo -e "\033[38;5;213m(_    _Spool LAMP_    /~\" \033[0m"
+echo -e "\033[38;5;51m  (_)_)           (_)_)    \033[0m"
+echo -e "LAMP web server installation \033[32mSUCCESS!\033[0m"
+echo -e "If you installed XFCE, you need to open port 443 before you can use RDP."
+echo -e "Visit the homepage: http://$ip"
+echo -e "Visit phpMyAdmin: http://$ip/phpMyAdmin"
+echo -e "For further Apache configuration, see /etc/apache2"
