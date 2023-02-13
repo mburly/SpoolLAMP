@@ -1,22 +1,22 @@
 #!/bin/bash
 #
-# Install necessary packages to host a LAMP application
+# Installs necessary packages to host a LAMP application
 #
 # Prerequisites: Logged in as root or user has sudo privileges
 # 
-#
 # Available optional packages:
 # Certbot - Used to get free local SSL certificates
 # Croc - Easy file sharing between machines
 # Pip - Python package installer
 # XFCE - Linux desktop environment
 # XRDP - Linux remote desktop connection
-#
-#
-# Suppress output of apt commands, instead put own echo in place saying Done!
-#
-#
 
+displayLogo() {
+  echo -e "\033[38;5;213m                     __    \033[0m"
+  echo -e "\033[38;5;51m(\,-----------------'()'--o\033[0m"
+  echo -e "\033[38;5;213m(_    _Spool LAMP_    /~\" \033[0m"
+  echo -e "\033[38;5;51m  (_)_)           (_)_)    \033[0m"
+}
 
 options_o=()
 ip=$(curl -s https://api.ipify.org)
@@ -62,21 +62,20 @@ while getopts "o:" opt; do
   esac
 done
 
-echo -e "\n\n"
-echo -e "\033[38;5;213m                     __    \033[0m"
-echo -e "\033[38;5;51m(\,-----------------'()'--o\033[0m"
-echo -e "\033[38;5;213m(_    _Spool LAMP_    /~\" \033[0m"
-echo -e "\033[38;5;51m  (_)_)           (_)_)    \033[0m"
-echo -e "Starting installation...\n\n"
-
+displayLogo
+echo -e "Updating system...\n\n"
 sudo apt -qq -y update
 sudo apt -qq -y upgrade
 sudo apt -y -qq install git curl
+displayLogo
+echo -e "Starting LAMP installation...\n\n"
 sudo apt -y -qq install apache2 mariadb-server php php-common libapache2-mod-php
 sudo mysql_secure_installation
 sudo apt -y -qq install phpmyadmin
 
 if [ $all == true ]; then
+  displayLogo
+  echo -e "Installing all extra packages: Certbot, Pip, XFCE, XRDP...\n\n"
   sudo apt -y install snapd
   sudo snap install core
   sudo snap install --classic certbot
@@ -111,13 +110,8 @@ else
  fi
 fi
 
-echo -e "\n\n"
-echo -e "\033[38;5;213m                     __    \033[0m"
-echo -e "\033[38;5;51m(\,-----------------'()'--o\033[0m"
-echo -e "\033[38;5;213m(_    _Spool LAMP_    /~\" \033[0m"
-echo -e "\033[38;5;51m  (_)_)           (_)_)    \033[0m"
-echo -e "\n"
-echo -e "LAMP web server installation \033[32mSUCCESS!\033[0m\n"
+displayLogo
+echo -e "\nLAMP web server installation \033[32mSUCCESS!\033[0m\n"
 echo -e "Homepage: http://$ip"
 echo -e "Visit phpMyAdmin: http://$ip/phpmyadmin"
 echo -e "\nFor further Apache configuration for your applicaton's needs, see /etc/apache2"
